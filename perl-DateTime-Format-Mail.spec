@@ -4,39 +4,17 @@
 #
 Name     : perl-DateTime-Format-Mail
 Version  : 0.403
-Release  : 1
+Release  : 2
 URL      : https://cpan.metacpan.org/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libx/libxml-feed-perl/libxml-feed-perl_0.53+dfsg-1.debian.tar.xz
 Summary  : 'Convert between DateTime and RFC2822/822 formats'
 Group    : Development/Tools
 License  : Artistic-1.0 Artistic-1.0-Perl GPL-1.0
-Requires: perl-DateTime-Format-Mail-license
-Requires: perl-DateTime-Format-Mail-man
-Requires: perl(B::Hooks::EndOfScope)
-Requires: perl(Class::Data::Inheritable)
-Requires: perl(Class::Inspector)
-Requires: perl(Class::Singleton)
-Requires: perl(DateTime)
-Requires: perl(DateTime::Locale)
-Requires: perl(DateTime::TimeZone)
-Requires: perl(Exception::Class)
-Requires: perl(File::ShareDir)
-Requires: perl(Module::Implementation)
-Requires: perl(Module::Runtime)
-Requires: perl(Package::Stash)
-Requires: perl(Params::Validate)
-Requires: perl(Params::ValidationCompiler)
-Requires: perl(Specio::Exporter)
-Requires: perl(Sub::Exporter::Progressive)
-Requires: perl(Sub::Identify)
-Requires: perl(Try::Tiny)
-Requires: perl(Variable::Magic)
-Requires: perl(namespace::autoclean)
-Requires: perl(namespace::clean)
+Requires: perl-DateTime-Format-Mail-license = %{version}-%{release}
+BuildRequires : buildreq-cpan
 BuildRequires : perl(B::Hooks::EndOfScope)
 BuildRequires : perl(Class::Data::Inheritable)
-BuildRequires : perl(Class::Inspector)
 BuildRequires : perl(Class::Singleton)
 BuildRequires : perl(DateTime)
 BuildRequires : perl(DateTime::Locale)
@@ -62,6 +40,15 @@ Convert between DateTime and RFC2822/822 formats
 To install, run the following commands after untarring the
 distribution:
 
+%package dev
+Summary: dev components for the perl-DateTime-Format-Mail package.
+Group: Development
+Provides: perl-DateTime-Format-Mail-devel = %{version}-%{release}
+
+%description dev
+dev components for the perl-DateTime-Format-Mail package.
+
+
 %package license
 Summary: license components for the perl-DateTime-Format-Mail package.
 Group: Default
@@ -70,19 +57,11 @@ Group: Default
 license components for the perl-DateTime-Format-Mail package.
 
 
-%package man
-Summary: man components for the perl-DateTime-Format-Mail package.
-Group: Default
-
-%description man
-man components for the perl-DateTime-Format-Mail package.
-
-
 %prep
-tar -xf %{SOURCE1}
-cd ..
 %setup -q -n DateTime-Format-Mail-0.403
-mkdir -p %{_topdir}/BUILD/DateTime-Format-Mail-0.403/deblicense/
+cd ..
+%setup -q -T -D -n DateTime-Format-Mail-0.403 -b 1
+mkdir -p deblicense/
 mv %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/DateTime-Format-Mail-0.403/deblicense/
 
 %build
@@ -107,13 +86,13 @@ make TEST_VERBOSE=1 test
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/perl-DateTime-Format-Mail
-cp LICENSE %{buildroot}/usr/share/doc/perl-DateTime-Format-Mail/LICENSE
-cp deblicense/copyright %{buildroot}/usr/share/doc/perl-DateTime-Format-Mail/deblicense_copyright
+mkdir -p %{buildroot}/usr/share/package-licenses/perl-DateTime-Format-Mail
+cp LICENSE %{buildroot}/usr/share/package-licenses/perl-DateTime-Format-Mail/LICENSE
+cp deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-DateTime-Format-Mail/deblicense_copyright
 if test -f Makefile.PL; then
-make pure_install PERL_INSTALL_ROOT=%{buildroot}
+make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
-./Build install --installdirs=site --destdir=%{buildroot}
+./Build install --installdirs=vendor --destdir=%{buildroot}
 fi
 find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null ';'
@@ -122,13 +101,13 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/site_perl/5.26.1/DateTime/Format/Mail.pm
+/usr/lib/perl5/vendor_perl/5.26.1/DateTime/Format/Mail.pm
 
-%files license
-%defattr(-,root,root,-)
-/usr/share/doc/perl-DateTime-Format-Mail/LICENSE
-/usr/share/doc/perl-DateTime-Format-Mail/deblicense_copyright
-
-%files man
+%files dev
 %defattr(-,root,root,-)
 /usr/share/man/man3/DateTime::Format::Mail.3
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/perl-DateTime-Format-Mail/LICENSE
+/usr/share/package-licenses/perl-DateTime-Format-Mail/deblicense_copyright
