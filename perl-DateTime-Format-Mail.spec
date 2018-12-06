@@ -4,7 +4,7 @@
 #
 Name     : perl-DateTime-Format-Mail
 Version  : 0.403
-Release  : 7
+Release  : 8
 URL      : https://cpan.metacpan.org/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libx/libxml-feed-perl/libxml-feed-perl_0.53+dfsg-1.debian.tar.xz
